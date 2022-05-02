@@ -11,3 +11,54 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+main {
+  margin: 0 5rem;
+}
+.invalid label,
+.invalid .error-text {
+  color: red;
+}
+.invalid input {
+  border-color: red;
+}
+.spinner {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.spinner:after {
+  content: ' ';
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid teal;
+  border-color: teal transparent teal transparent;
+  animation: spinner 1.2s linear infinite;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show>.nav-link {
+  background-color: #7474ed;
+  color: white;
+  border-radius: 5px;
+}
+
+.btn-primary-pet-peers {
+  color: #fff;
+  background-color: #7474ed;
+  border-color: #7474ed;
+}
+
+input.password {
+  -webkit-text-security: disc;
+}
