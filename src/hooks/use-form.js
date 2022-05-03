@@ -4,7 +4,6 @@ const useForm = (callback, validate, initialValues = {}) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [valid, setValid] = useState(false);
 
   const isValid = Object.keys(errors).length === 0;
 
@@ -13,7 +12,7 @@ const useForm = (callback, validate, initialValues = {}) => {
       setIsSubmitting(false);
       callback(values);
     }
-  }, [errors, values, isSubmitting, callback]);
+  }, [errors, values, isSubmitting, callback, isValid]);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -26,7 +25,6 @@ const useForm = (callback, validate, initialValues = {}) => {
   };
 
   const changeHandler = (event) => {
-    event.persist();
     setIsSubmitting(false);
     setValues((values) => ({
       ...values,
@@ -34,9 +32,16 @@ const useForm = (callback, validate, initialValues = {}) => {
     }));
   };
 
+  const resetHandler = (event) => {
+    event.preventDefault();
+    setIsSubmitting(false);
+    setValues(initialValues);
+  };
+
   return {
     submitHandler,
     changeHandler,
+    resetHandler,
     values,
     errors,
   };

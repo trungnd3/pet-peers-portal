@@ -6,6 +6,8 @@ export const selectStatus = (state) => state.auth.status;
 
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 
+export const selectUser = (state) => state.auth.user;
+
 export const authenticate = createAsyncThunk(
   'auth/authenticate',
   async ({ username, password }, { rejectWithValue }) => {
@@ -18,9 +20,7 @@ export const authenticate = createAsyncThunk(
         body: JSON.stringify({ username, password }),
       });
       if (!response.ok) {
-        const d = await response.json();
-        console.log(d);
-        throw new Error();
+        throw new Error('Either User Name or Password or both are invalid');
       }
       const data = await response.json();
       localStorage.setItem('user', data.user);
@@ -37,8 +37,7 @@ export const addUser = createAsyncThunk(
     try {
       const unqRes = await fetch(`${CHECK_EXIST_URL}/${username}`);
       if (!unqRes.ok) {
-        const d = await unqRes.json();
-        throw new Error('Error');
+        throw new Error('Check user existing failed!');
       }
       const result = await unqRes.json();
 
@@ -56,8 +55,7 @@ export const addUser = createAsyncThunk(
         body: JSON.stringify({ username, password, confirmPassword }),
       });
       if (!regRes.ok) {
-        const d = await regRes.json();
-        throw new Error();
+        throw new Error('Add user failed!');
       }
       const data = await regRes.json();
       return data;

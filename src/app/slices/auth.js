@@ -6,7 +6,7 @@ const storedUser = localStorage.getItem('user');
 const initialState = {
   isLoggedIn: !!storedUser,
   token: '',
-  user: storedUser,
+  user: storedUser || '',
   status: {
     loading: 'idle',
     error: '',
@@ -47,7 +47,7 @@ const authSlice = createSlice({
       })
       .addCase(authenticate.rejected, (state, action) => {
         state.status.loading = 'failed';
-        state.status.error = action.payload;
+        state.status.error = 'Either User Name or Password or both are invalid';
       });
   },
 });

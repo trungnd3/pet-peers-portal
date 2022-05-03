@@ -8,16 +8,15 @@ import Centered from '../components/UI/Centered';
 import FormGroup from '../components/UI/FormGroup';
 
 import useForm from '../hooks/use-form';
-import { addUser, selectStatus } from '../app/action-creators/auth';
-import { Link } from 'react-router-dom';
+import { addPet, selectStatus } from '../app/action-creators/pet';
 
-const Registration = () => {
+const AddPet = () => {
   const dispatch = useDispatch();
   const status = useSelector(selectStatus);
 
-  const register = useCallback(
+  const addNewPet = useCallback(
     (values) => {
-      dispatch(addUser({ ...values }));
+      dispatch(addPet({ ...values }));
     },
     [dispatch]
   );
@@ -25,25 +24,29 @@ const Registration = () => {
   const validate = () => {
     let errors = {};
 
-    if (!values.username) {
-      errors.username = 'Mandatory Field';
+    if (!values.name) {
+      errors.name = 'Mandatory Field';
     }
 
-    if (!values.password) {
-      errors.password = 'Mandatory Field';
+    if (!values.age) {
+      errors.age = 'Mandatory Field';
+    } else if (
+      isNaN(values.age) ||
+      Number(values.age) < 0 ||
+      Number(values.age) > 99
+    ) {
+      errors.age = 'Age should be 0 and 99 years';
     }
 
-    if (!values.confirmPassword) {
-      errors.confirmPassword = 'Mandatory Field';
-    } else if (values.confirmPassword !== values.password) {
-      errors.confirmPassword = 'Passwords do not match';
+    if (!values.place) {
+      errors.place = 'Mandatory Field';
     }
 
     return errors;
   };
 
   const { submitHandler, changeHandler, resetHandler, values, errors } =
-    useForm(register, validate);
+    useForm(addNewPet, validate);
 
   if (status.loading === 'pending') {
     return (
@@ -56,9 +59,7 @@ const Registration = () => {
   if (status.loading === 'success') {
     return (
       <Centered>
-        <h3>
-          You are successfully registered. Please <Link to='/'>sign in</Link>
-        </h3>
+        <h3>You are successfully add pet</h3>
       </Centered>
     );
   }
@@ -68,28 +69,26 @@ const Registration = () => {
       <Form onSubmit={submitHandler} className='w-50'>
         <FormGroup
           type='text'
-          label='Username'
-          name='username'
-          value={values.username}
-          error={errors.username}
+          label='Name'
+          name='name'
+          value={values.name}
+          error={errors.name}
           onChange={changeHandler}
         />
         <FormGroup
           type='text'
-          label='Password'
-          name='password'
-          className='password'
-          value={values.password}
-          error={errors.password}
+          label='Age'
+          name='age'
+          value={values.age}
+          error={errors.age}
           onChange={changeHandler}
         />
         <FormGroup
           type='text'
-          label='Confirm Password'
-          name='confirmPassword'
-          className='password'
-          value={values.confirmPassword}
-          error={errors.confirmPassword}
+          label='Place'
+          name='place'
+          value={values.place}
+          error={errors.place}
           onChange={changeHandler}
         />
         {status.loading === 'failed' && (
@@ -107,7 +106,7 @@ const Registration = () => {
             type='submit'
             className='w-25 me-2'
           >
-            Submit
+            Save
           </Button>
           <Button
             variant='primary-pet-peers'
@@ -115,7 +114,7 @@ const Registration = () => {
             className='w-25 me-2'
             onClick={resetHandler}
           >
-            Reset
+            Cancel
           </Button>
         </Form.Group>
       </Form>
@@ -123,4 +122,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default AddPet;

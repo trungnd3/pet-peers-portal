@@ -24,6 +24,7 @@ const FormGroup = ({
         <Form.Control
           type={type}
           name={name}
+          autoComplete={className === 'password' ? 'off' : 'auto'}
           className={className !== undefined ? className : ''}
           value={value || ''}
           onChange={onChange}

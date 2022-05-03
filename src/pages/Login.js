@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -21,9 +21,11 @@ const Login = () => {
   const status = useSelector(selectStatus);
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
-  if (isLoggedIn) {
-    navigate('/pets');
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/pets');
+    }
+  }, [isLoggedIn, navigate]);
 
   const login = useCallback(
     (values) => {
@@ -37,7 +39,6 @@ const Login = () => {
 
     if (!values.username) {
       errors.username = 'Mandatory Field';
-    } else {
     }
 
     if (!values.password) {
@@ -47,10 +48,8 @@ const Login = () => {
     return errors;
   };
 
-  const { submitHandler, changeHandler, values, errors } = useForm(
-    login,
-    validate
-  );
+  const { submitHandler, changeHandler, resetHandler, values, errors } =
+    useForm(login, validate);
 
   if (status.loading === 'pending') {
     return (
@@ -99,8 +98,9 @@ const Login = () => {
           </Button>
           <Button
             variant='primary-pet-peers'
-            type='submit'
+            type='button'
             className='w-25 me-2'
+            onClick={resetHandler}
           >
             Reset
           </Button>
