@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addPet } from '../action-creators/pet';
+import { addPet, fetchPetsAsync } from '../action-creators/pet';
 
 const initialState = {
   items: [],
@@ -40,6 +40,17 @@ const petSlice = createSlice({
       .addCase(addPet.rejected, (state) => {
         state.status.loading = 'failed';
         state.status.error = 'Cannot add new pet';
+      })
+      .addCase(fetchPetsAsync.pending, (state) => {
+        state.status.loading = 'pending';
+      })
+      .addCase(fetchPetsAsync.fulfilled, (state, action) => {
+        state.status.loading = 'success';
+        state.items = action.payload;
+      })
+      .addCase(fetchPetsAsync.rejected, (state) => {
+        state.status.loading = 'failed';
+        state.status.error = 'Cannot fetch pets';
       }),
 });
 

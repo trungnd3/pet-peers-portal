@@ -19,16 +19,9 @@ const SearchPet = ({ show, onClose, onSearch }) => {
   );
 
   return (
-    <Modal
-      size='lg'
-      show={show}
-      onHide={onClose}
-      aria-labelledby='example-custom-modal-styling-title'
-    >
+    <Modal size='lg' show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title id='example-custom-modal-styling-title'>
-          Advanced Search
-        </Modal.Title>
+        <Modal.Title>Advanced Search</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={submitHandler}>
@@ -83,7 +76,7 @@ const SearchPet = ({ show, onClose, onSearch }) => {
               className='ms-2'
               onClick={() => {
                 resetHandler();
-                onSearch({ ...values });
+                onSearch({ name: '', place: '', age: '' });
               }}
             >
               Clear

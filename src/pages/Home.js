@@ -2,13 +2,21 @@ import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Centered from '../components/UI/Centered';
-import Pets from '../components/Pet/PetTable';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
+import PetTableVirtualScorll from '../components/Pet/PetTableVirtualScorll';
 import SearchPet from '../components/Pet/SearchPet';
-import { selectAllPets, buyPet } from '../app/action-creators/pet';
+import PetInfo from '../components/Pet/PetInfo';
+import {
+  selectAllPets,
+  buyPet,
+  selectStatus,
+} from '../app/action-creators/pet';
 import { selectUser } from '../app/action-creators/auth';
+import classes from '../styles/Home.module.scss';
 
 const Home = () => {
   const pets = useSelector(selectAllPets);
+  const status = useSelector(selectStatus);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const [searching, setSearching] = useState(false);
@@ -58,6 +66,14 @@ const Home = () => {
     setSearching(false);
   };
 
+  if (status.loading === 'pending') {
+    return (
+      <Centered>
+        <LoadingSpinner />
+      </Centered>
+    );
+  }
+
   if (pets.length === 0) {
     return (
       <Centered>
@@ -73,12 +89,17 @@ const Home = () => {
         onClose={closeSearchHandler}
         onSearch={searchHandler}
       />
-      <div className='p-3 d-flex flex-row-reverse'>
+      <div className={classes.homeHeader}>
         <Button variant='light' onClick={startSearchHandler}>
           Advanced Search
         </Button>
+        <PetInfo soldCount={10} totalCount={15} />
       </div>
-      <Pets pets={filteredPets} onBuyPet={buyPetHandler} purchasable={true} />
+      <PetTableVirtualScorll
+        pets={filteredPets}
+        onBuyPet={buyPetHandler}
+        purchasable={true}
+      />
     </Fragment>
   );
 };

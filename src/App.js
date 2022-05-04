@@ -10,13 +10,13 @@ import Registration from './pages/Registration';
 import AddPet from './pages/AddPet';
 import MyPets from './pages/MyPets';
 
-import { fetchPets } from './app/action-creators/pet';
+import { fetchPetsAsync } from './app/action-creators/pet';
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPets());
+    dispatch(fetchPetsAsync());
   }, [dispatch]);
 
   return (

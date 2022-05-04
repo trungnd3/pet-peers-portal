@@ -32,8 +32,7 @@ const useForm = (callback, validate, initialValues = {}) => {
     }));
   };
 
-  const resetHandler = (event) => {
-    event.preventDefault();
+  const resetHandler = () => {
     setIsSubmitting(false);
     setValues(initialValues);
   };

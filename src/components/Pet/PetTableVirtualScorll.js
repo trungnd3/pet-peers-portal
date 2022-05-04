@@ -1,11 +1,13 @@
+import { Fragment } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+import VirtualAndInfiniteScroll from '../UI/VirtualAndInfiniteScroll';
 
-const PetTable = ({ pets, onBuyPet }) => {
+const PetTableVirtualScorll = ({ pets, onBuyPet }) => {
   const purchasable = onBuyPet !== undefined;
 
   const listPets = pets.map(({ id, name, place, age, owner }, index) => (
-    <tr key={id}>
+    <Fragment key={id}>
       <td>{index + 1}</td>
       <td>{name}</td>
       <td>{place}</td>
@@ -29,7 +31,7 @@ const PetTable = ({ pets, onBuyPet }) => {
           )}
         </td>
       )}
-    </tr>
+    </Fragment>
   ));
 
   return (
@@ -43,9 +45,16 @@ const PetTable = ({ pets, onBuyPet }) => {
           {purchasable && <th>Action</th>}
         </tr>
       </thead>
-      <tbody>{listPets}</tbody>
+      <tbody>
+        <VirtualAndInfiniteScroll
+          type='tr'
+          listItems={listPets}
+          height='30'
+          lastRowHandler={() => {}}
+        />
+      </tbody>
     </Table>
   );
 };
 
-export default PetTable;
+export default PetTableVirtualScorll;

@@ -11,6 +11,11 @@ export const selectOwnedPets = (state) =>
     (item) => item.owner !== undefined && item.owner === state.auth.user
   );
 
+export const selectTotalCount = (state) => state.pet.items.length;
+
+export const selectSoldCount = (state) =>
+  state.pet.items.filter((item) => item.owner !== undefined).length || 0;
+
 export const addPet = createAsyncThunk(
   'pet/add',
   async ({ name, age, place }, { rejectWithValue }) => {
@@ -47,6 +52,25 @@ export const buyPet = (user, petId) => {
     dispatch(updateOwner(data.pet));
   };
 };
+
+export const fetchPetsAsync = createAsyncThunk(
+  'pet/fetchAsync',
+  async (_, { getState, rejectWithValue }) => {
+    const curState = getState();
+    try {
+      if (!curState.pet.init) {
+        const response = await fetch(GET_PETS_URL);
+        if (!response.ok) {
+          throw new Error('Fetch pets failed!');
+        }
+        const data = await response.json();
+        return data.pets;
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const fetchPets = () => {
   return async (dispatch, getState) => {
